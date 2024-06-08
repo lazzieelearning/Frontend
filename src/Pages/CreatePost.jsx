@@ -60,13 +60,14 @@ const CreatePost = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const strippedContent = formData.content.replace(/<[^>]+>/g, '');
       const res = await fetch('http://localhost:5000/api/post/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           "token":localStorage.getItem("Token")
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, content: strippedContent }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -147,7 +148,7 @@ const CreatePost = () => {
           theme='snow'
           placeholder='Write something...'
           className='h-72 mb-12'
-          required
+         required
           onChange={(value) => {
             setFormData({ ...formData, content: value });
           }}
